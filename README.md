@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧵 Handcrafted Haven
 
-## Getting Started
+**Handcrafted Haven** is an innovative web application designed to empower artisans and crafters by providing a platform to showcase and sell their unique, handmade items. The platform connects creators with customers who value craftsmanship, creativity, and sustainability.
 
-First, run the development server:
+---
+
+## 🌟 Overview
+
+Handcrafted Haven serves as a digital marketplace where local artisans can create personalized seller profiles, list handcrafted items for sale, and engage with a community of conscious consumers. This project emphasizes accessibility, community building, and sustainability.
+
+---
+
+## 🎯 Features
+
+- **Seller Profiles**: Authenticated sellers can create profiles to share their stories and showcase their work.
+- **Product Listings**: Add items with images, descriptions, and pricing.
+- **Search & Filters**: Browse and filter products by category, price range, and more.
+- **Reviews and Ratings**: Buyers can leave feedback on products.
+- **Responsive Design**: Optimized for desktops, tablets, and mobile devices.
+- **Accessible UI**: Compliant with WCAG 2.1 (Level AA) accessibility guidelines.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Front-End**: HTML, CSS, JavaScript, [Next.js](https://nextjs.org)
+- **Back-End**: Node.js (future), database TBD
+- **Deployment**: [Vercel](https://vercel.com)
+- **Version Control**: Git & GitHub
+- **Project Management**: GitHub Project Boards
+
+---
+
+## 👥 Team Members
+
+- [Jeremiah Ebizo] (Solo for now)
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+# Clone the repository
+git clone https://github.com/code-lova/handcrafted-haven-frontend.git
+
+# Navigate to the project directory
+cd handcrafted-haven-frontend.git
+
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
