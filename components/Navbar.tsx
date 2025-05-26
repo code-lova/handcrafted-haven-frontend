@@ -11,19 +11,19 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <div className="text-2xl font-playfair font-bold text-[#4A5A40]">
+        <div className="text-2xl font-playfair font-bold text-olive">
           Handcrafted Haven
         </div>
 
-        <div className="hidden md:flex items-center space-x-6 text-[#3C2F2F] font-medium">
+        <div className="hidden md:flex items-center space-x-6 text-rich-brown font-medium">
           <Link href="/" className="hover:text-[#4A5A40]">Home</Link>
-          <Link href="/shop" className="hover:text-[#4A5A40]">Shop</Link>
-          <Link href="/login" className="hover:text-[#4A5A40]">Login</Link>
-          <Link href="/signup" className="hover:text-[#4A5A40]">SignUp</Link>
+          <Link href="/products" className="hover:text-olive">Shop</Link>
+          <Link href="/login" className="hover:text-olive">Login</Link>
+          <Link href="/signup" className="hover:text-olive">SignUp</Link>
         </div>
 
         <button
-          className="md:hidden text-[#4A5A40]"
+          className="md:hidden text-olive"
           onClick={toggleDrawer}
           aria-label="Toggle menu"
         >

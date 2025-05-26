@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <section className="text-center px-6 py-20 bg-[#D96459] text-white">
+    <section className="text-center px-6 py-20 bg-terracotta text-white">
       <h1 className="text-5xl md:text-6xl font-playfair font-bold mb-4">
         Welcome to Handcrafted Haven
       </h1>

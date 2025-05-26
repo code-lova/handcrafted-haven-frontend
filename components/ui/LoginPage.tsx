@@ -16,7 +16,7 @@ const LoginPage = () => {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-6 py-12 bg-[#F5F3EF]">
+    <main className="min-h-screen flex items-center justify-center px-6 py-12 bg-white">
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center font-playfair">
           Login to Your Account

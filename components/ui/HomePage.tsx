@@ -13,28 +13,29 @@ const HomePage = () => {
         <h2 className="text-3xl font-playfair font-semibold mb-10 text-center">
           Featured Products
         </h2>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <div
               key={item}
               className="bg-white rounded-xl shadow hover:shadow-lg transition p-4"
             >
-              <div className="h-48 bg-[#F5F3EF] rounded-md mb-4 flex items-center justify-center">
-                <span className="text-[#D9B382] font-semibold">
+              <div className="h-48 bg-white rounded-md mb-4 flex items-center justify-center">
+                <span className="text-gold font-semibold">
                   Product Image
                 </span>
               </div>
               <h3 className="text-xl font-playfair mb-2">
                 Handmade Item #{item}
               </h3>
-              <p className="text-[#4A5A40] font-medium">$29.99</p>
+              <p className="text-olive font-medium">$29.99</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Mission Statement */}
-      <section className="px-6 py-16 bg-[#4A5A40] text-white">
+      <section className="px-6 py-16 bg-olive text-white">
         <h2 className="text-3xl font-playfair font-semibold mb-6 text-center">
           Our Mission
         </h2>

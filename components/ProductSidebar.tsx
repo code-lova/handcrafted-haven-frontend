@@ -7,7 +7,7 @@ const ProductSidebar = () => {
   const [priceRange, setPriceRange] = useState("");
 
   return (
-    <aside className="w-full md:w-64 p-4 bg-[#F5F3EF] rounded-lg">
+    <aside className="w-full md:w-64 p-4 bg-white rounded-lg">
       <h3 className="font-semibold text-lg mb-4">Filter By</h3>
 
       <div className="mb-6">

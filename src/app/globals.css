@@ -7,8 +7,11 @@
 @theme {
   --color-ctaBtn: #4a5a40;
   --color-ctaBtnHover: #3b4b30;
-   --color-olive: #4A5A40;
+  --color-olive: #4A5A40;
   --color-gold: #D9B382;
+  --color-white: #F5F3EF;
+  --color-rich-brown: #3C2F2F;
+  --color-terracotta: #D96459;
 }
 
 
@@ -25,8 +28,4 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
-@utilities {
-  .cta-button {
-    @apply mt-6 px-6 py-3 rounded-md bg-ctaBtn hover:bg-ctaBtnHover text-white font-medium cursor-pointer;
-  }
-}
+

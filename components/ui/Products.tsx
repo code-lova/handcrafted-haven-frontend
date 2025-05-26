@@ -4,6 +4,7 @@ import Navbar from "../Navbar";
 import Image from "next/image";
 import Hero from "../Hero";
 import Footer from "../Footer";
+import Link from "next/link";
 
 const Products = () => {
   return (
@@ -21,24 +22,23 @@ const Products = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((item) => (
-              <div
-                key={item}
-                className="bg-white rounded-xl shadow hover:shadow-lg transition p-4"
-              >
-                <div className="h-48 bg-[#F5F3EF] rounded-md mb-4 flex items-center justify-center">
-                  <Image
-                    src="/image1.jpeg"
-                    alt="Product"
-                    width={200}
-                    height={200}
-                    className="object-contain"
-                  />
+              <Link key={item} href={`/products/${item}`} className="cursor-pointer">
+                <div className="bg-white rounded-xl shadow hover:shadow-lg transition p-4">
+                  <div className="h-48 bg-white rounded-md mb-4 flex items-center justify-center">
+                    <Image
+                      src="/image1.jpeg"
+                      alt="Product"
+                      width={200}
+                      height={200}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-lg font-playfair mb-2">
+                    Handmade Item #{item}
+                  </h3>
+                  <p className="text-olive font-semibold">$29.99</p>
                 </div>
-                <h3 className="text-lg font-playfair mb-2">
-                  Handmade Item #{item}
-                </h3>
-                <p className="text-[#4A5A40] font-semibold">$29.99</p>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
