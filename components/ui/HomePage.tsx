@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../Navbar";
 import Hero from "../Hero";
 import Footer from "../Footer";
+import Link from "next/link";
 const HomePage = () => {
   return (
     <>
@@ -13,23 +14,24 @@ const HomePage = () => {
         <h2 className="text-3xl font-playfair font-semibold mb-10 text-center">
           Featured Products
         </h2>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div
+            <Link
               key={item}
-              className="bg-white rounded-xl shadow hover:shadow-lg transition p-4"
+              href={`/products/${item}`}
+              className="cursor-pointer"
             >
-              <div className="h-48 bg-white rounded-md mb-4 flex items-center justify-center">
-                <span className="text-gold font-semibold">
-                  Product Image
-                </span>
+              <div className="bg-white rounded-xl shadow hover:shadow-lg transition p-4">
+                <div className="h-48 bg-white rounded-md mb-4 flex items-center justify-center">
+                  <span className="text-gold font-semibold">Product Image</span>
+                </div>
+                <h3 className="text-xl font-playfair mb-2">
+                  Handmade Item #{item}
+                </h3>
+                <p className="text-olive font-medium">$29.99</p>
               </div>
-              <h3 className="text-xl font-playfair mb-2">
-                Handmade Item #{item}
-              </h3>
-              <p className="text-olive font-medium">$29.99</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -47,8 +49,7 @@ const HomePage = () => {
         </p>
       </section>
 
-      
-     <Footer />
+      <Footer />
     </>
   );
 };

@@ -4,11 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 
 const RegisterPage = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "buyer",
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Send data to backend
@@ -40,6 +47,16 @@ const RegisterPage = () => {
             required
             className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-olive"
           />
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-olive bg-white"
+          >
+            <option value="buyer">Buyer</option>
+            <option value="seller">Seller</option>
+          </select>
           <input
             type="password"
             name="password"

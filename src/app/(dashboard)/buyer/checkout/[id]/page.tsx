@@ -1,5 +1,5 @@
 import React from "react";
-import Checkout from "../../../../../components/ui/Checkout";
+import Checkout from "../../../../../../components/ui/Checkout";
 
 const page = () => {
   return <Checkout />;
