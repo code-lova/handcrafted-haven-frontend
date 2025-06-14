@@ -29,7 +29,7 @@ const authOptions: AuthOptions = {
           throw new Error("Email and password are required");
         }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(credentials),
@@ -46,7 +46,7 @@ const authOptions: AuthOptions = {
         }
 
         return {
-          id: data.id || data._id || "",
+          id: data.id,
           name: data.name,
           email: data.email,
           role: data.role || "buyer", // default if missing
@@ -57,7 +57,7 @@ const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/signin",
+    signIn: "/login",
   },
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: CustomUser }) {

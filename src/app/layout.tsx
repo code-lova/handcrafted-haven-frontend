@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import SessionProviderWrapper from "../../components/SessionProviderWrapper";
+import SessionProviderWrapper from "../components/SessionProviderWrapper";
+import TanstackProvider from "@/providers/tanstackQuery";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { UserProvider } from "@/context/userContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,9 +31,16 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} font-sans antialiased`}
       >
-        <SessionProviderWrapper>
-          <main>{children}</main>
-        </SessionProviderWrapper>
+        <TanstackProvider>
+          <SessionProviderWrapper>
+            <UserProvider>
+              <main>
+                {children}
+                <Toaster />
+              </main>
+            </UserProvider>
+          </SessionProviderWrapper>
+        </TanstackProvider>
       </body>
     </html>
   );

@@ -3,28 +3,44 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import useSignOut from "@/utils/logoutHandler";
 
 const SellerNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDrawer = () => setIsOpen(!isOpen);
 
+  const { handleSignOut } = useSignOut();
+
   return (
     <header className="bg-olive text-white sticky top-0 z-50 shadow">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-        <Link href="/" className="text-xl font-playfair font-bold">
+        {/* Desktop Menu */}
+        <Link href="/seller" className="text-xl font-playfair font-bold">
           Seller Dashboard
         </Link>
-
-        {/* Desktop Menu */}
         <nav className="hidden md:flex space-x-6 font-medium">
-          <Link href="/dashboard/create-story" className="hover:text-gold">
-            Create Story
+          <Link href="/seller" className="hover:text-gold">
+            Dashboard
+          </Link>
+          <Link href="/seller/story" className="hover:text-gold">
+            Stories
+          </Link>
+          <Link href="/seller/category" className="hover:text-gold">
+            Category
+          </Link>
+          <Link href="/seller/orders" className="hover:text-gold">
+            Orders
           </Link>
           <Link href="/dashboard/profile" className="hover:text-gold">
             My Profile
           </Link>
-          <button className="hover:text-gold">Logout</button>
+          <button
+            className="hover:text-gold cursor-pointer"
+            onClick={handleSignOut}
+          >
+            Logout
+          </button>
         </nav>
 
         {/* Mobile Hamburger */}
@@ -45,15 +61,25 @@ const SellerNavbar = () => {
           </button>
         </div>
         <nav className="flex flex-col space-y-4 px-6 font-medium">
-          <Link href="/dashboard/create-story" onClick={toggleDrawer}>
-            Create Story
+          <Link href="/seller" onClick={toggleDrawer}>
+            Dashboard
           </Link>
-          <Link href="/dashboard/profile" onClick={toggleDrawer}>
+          <Link href="/seller/story" onClick={toggleDrawer}>
+            Stories
+          </Link>
+          <Link href="/seller/category" onClick={toggleDrawer}>
+            Category
+          </Link>
+          <Link href="/seller/orders" onClick={toggleDrawer}>
+            Orders
+          </Link>
+          <Link href="/seller/profile" onClick={toggleDrawer}>
             My Profile
           </Link>
-          <Link href="#" onClick={toggleDrawer}>
-            Logout
+          <Link href="/seller/orders" onClick={toggleDrawer}>
+            Orders
           </Link>
+          <p onClick={handleSignOut}>Logout</p>
         </nav>
       </div>
 

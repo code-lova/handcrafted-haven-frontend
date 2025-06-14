@@ -1,10 +1,8 @@
-import React from 'react'
-import SuccessPage from '../../../../components/ui/SuccessPage'
+import React from "react";
+import SuccessPage from "../../../components/ui/SuccessPage";
 
 const page = () => {
-  return (
-    <SuccessPage />
-  )
-}
+  return <SuccessPage />;
+};
 
-export default page
+export default page;
