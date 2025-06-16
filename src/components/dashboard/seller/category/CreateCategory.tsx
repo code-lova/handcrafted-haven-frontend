@@ -55,7 +55,6 @@ const CreateCategory = () => {
         <Clickbutton
           text="Back to categories"
           type="button"
-          color="olive"
           onClick={() => goBack()}
         />
       </div>

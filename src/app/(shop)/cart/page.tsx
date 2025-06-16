@@ -1,10 +1,10 @@
-import BuyerDashboard from "@/components/dashboard/buyer/BuyerDashboard";
+import Cart from "@/components/ui/Cart";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <BuyerDashboard />
+      <Cart />
     </div>
   );
 };

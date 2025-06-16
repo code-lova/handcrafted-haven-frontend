@@ -77,7 +77,6 @@ const Category = () => {
           <Clickbutton
             text="Add new category"
             type="button"
-            color="olive"
             onClick={() => createCategory()}
           />
         </div>
@@ -124,7 +123,6 @@ const Category = () => {
                   <div className="flex items-center justify-between mt-4">
                     <Clickbutton
                       type="button"
-                      color="from-purple-600 to-blue-500"
                       text="View category"
                       onClick={() => handleEditClick(category)}
                     />

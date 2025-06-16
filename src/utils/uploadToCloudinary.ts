@@ -23,5 +23,8 @@ export async function uploadToCloudinary(file: File) {
   }
 
   const data = await res.json();
-  return data.secure_url;
+  return {
+    secure_url: data.secure_url,
+    public_id: data.public_id, // this is needed for delete later
+  };
 }

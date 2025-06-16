@@ -5,6 +5,7 @@ import TanstackProvider from "@/providers/tanstackQuery";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { UserProvider } from "@/context/userContext";
+import { CartProvider } from "@/context/CartContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,7 +36,7 @@ export default function RootLayout({
           <SessionProviderWrapper>
             <UserProvider>
               <main>
-                {children}
+                <CartProvider>{children}</CartProvider>
                 <Toaster />
               </main>
             </UserProvider>

@@ -10,28 +10,34 @@ import { useRouter } from "next/navigation";
 import LoaderButtons from "../core/loaders/LoaderButtons";
 import { loginProps } from "@/types";
 import { useUserContext } from "@/context/userContext";
+import { useCart } from "@/context/CartContext";
+import LoadingSpinner from "../core/spinner/LoadingSpinner";
 
 const LoginPage = () => {
   const { refetchUser } = useUserContext();
+  const { cart } = useCart();
   const { data: session, status } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const [redirected, setRedirected] = useState(false);
 
   // Redirect logged-in users to their respective dashboard
   useEffect(() => {
-    if (status === "authenticated") {
-      switch (session.user.role) {
-        case "seller":
-          router.push("/seller");
-          break;
-        case "buyer":
-          router.push("/buyer");
-          break;
-        default:
-          router.push("/signin");
+    if (status === "authenticated" && !redirected) {
+      const userRole = session?.user?.role;
+
+      if (userRole === "seller") {
+        router.push("/seller");
+        setRedirected(true);
+      } else if (userRole === "buyer") {
+        router.push(cart.length > 0 ? "/cart" : "/");
+        setRedirected(true);
+      } else {
+        router.push("/signin");
+        setRedirected(true);
       }
     }
-  }, [session, status, router]);
+  }, [session, status, cart, router, redirected]);
 
   const handleSubmit = async (
     values: loginProps,
@@ -55,6 +61,10 @@ const LoginPage = () => {
 
     setSubmitting(false);
   };
+
+  if (status === "loading" || status === "authenticated") {
+    return <LoadingSpinner />;
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center px-6 py-12 bg-white">
@@ -92,6 +102,11 @@ const LoginPage = () => {
                   id="password"
                   placeholder="Password"
                   className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-olive"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-600 text-sm mt-1"
                 />
               </div>
               <LoaderButtons

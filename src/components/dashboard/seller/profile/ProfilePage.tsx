@@ -1,33 +1,27 @@
 "use client";
-
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { registrationSchema } from "@/schema/auth";
-import toast from "react-hot-toast";
+import LoaderButtons from "@/components/core/loaders/LoaderButtons";
+import LoadingSpinner from "@/components/core/spinner/LoadingSpinner";
+import { useUserContext } from "@/context/userContext";
+import { userSchema } from "@/schema/auth";
+import { updateUserProfile } from "@/service/request/user";
+import { UserType } from "@/service/request/user/type";
 import { useMutation } from "@tanstack/react-query";
-import { registerRequest } from "@/service/request/auth/registerRequest";
-import { RegisterData } from "@/types";
-import LoaderButtons from "../core/loaders/LoaderButtons";
-import { useSession } from "next-auth/react";
-import LoadingSpinner from "../core/spinner/LoadingSpinner";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 
-const RegisterPage = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: session, status } = useSession();
-
-  const navigate = useRouter();
+const ProfilePage = () => {
+  const { user, isLoading, refetchUser } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { mutate } = useMutation({
-    mutationFn: registerRequest,
+    mutationFn: updateUserProfile,
     onMutate: () => {
       setLoading(true);
     },
     onSuccess: () => {
-      toast.success("Registration was successful");
-      navigate.push("/login");
+      toast.success("Successfully Updated your profile");
+      refetchUser()
       setLoading(false);
     },
     onError: (error) => {
@@ -40,30 +34,33 @@ const RegisterPage = () => {
     },
   });
 
-  const handleSubmit = (values: RegisterData) => {
+  const handleSubmit = (values: UserType) => {
+    console.log("values submitting", values);
     mutate(values);
   };
 
-  if (status === "loading" || status === "authenticated") {
-    return <LoadingSpinner/>
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-6 py-12 bg-white">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center font-playfair">
-          Create an Account
+    <div className="p-12">
+      <div className="flex justify-between items-center mb-10">
+        <h1 className="hidden md:block text-3xl font-playfair mb-6">
+          Update your profile details.
         </h1>
+      </div>
 
+      <div className="max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-md">
         <Formik
           initialValues={{
-            name: "",
-            email: "",
-            role: "",
+            name: user?.name || "",
+            email: user?.email || "",
+            role: user?.role || "",
             password: "",
             confirmPassword: "",
           }}
-          validationSchema={registrationSchema}
+          validationSchema={userSchema}
           onSubmit={handleSubmit}
         >
           {() => (
@@ -101,24 +98,6 @@ const RegisterPage = () => {
               </div>
 
               <div className="mb-5">
-                <label htmlFor="firstname"> Please select a role</label>
-                <Field
-                  name="role"
-                  as="select"
-                  className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-olive bg-white"
-                >
-                  <option value="">Select a role</option>
-                  <option value="buyer">Buyer</option>
-                  <option value="seller">Seller</option>
-                </Field>
-                <ErrorMessage
-                  name="role"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-
-              <div className="mb-5">
                 <label htmlFor="password"> Password </label>
                 <Field
                   type="password"
@@ -150,22 +129,16 @@ const RegisterPage = () => {
               </div>
               <LoaderButtons
                 loading={loading}
-                text="Create Account"
+                text="Update Profile"
                 type="submit"
-                loadingText="Creating Account"
+                loadingText="Updating Profile"
               />
             </Form>
           )}
         </Formik>
-        <p className="text-center text-sm mt-4">
-          Already have an account?{" "}
-          <Link href="/login" className="text-olive underline">
-            Login
-          </Link>
-        </p>
       </div>
-    </main>
+    </div>
   );
 };
 
-export default RegisterPage;
+export default ProfilePage;

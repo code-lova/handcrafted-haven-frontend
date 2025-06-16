@@ -24,13 +24,10 @@ export const createStory = async (payload: createStroyProps) => {
 
 //Get all stories
 export const getAllStories = async () => {
-  const response = await fetchWithAuth(
-    `${process.env.NEXT_PUBLIC_API_URL}/stories`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stories`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -41,10 +38,30 @@ export const getAllStories = async () => {
   return data;
 };
 
+export const getStoryDetailById = async (storyId: string): Promise<StoryProps> => {
+const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stories/story-detail/${storyId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to fetch story details.");
+  }
+
+  const data = await response.json();
+  // Handle if API returns array of one item
+  if (Array.isArray(data)) {
+    return data[0]; // get actual story object
+  }
+
+  return data;
+};
+
 //Get user stories
 export const getUserStories = async () => {
   const response = await fetchWithAuth(
-    `${process.env.NEXT_PUBLIC_API_URL}/stories/user-story`,
+    `${process.env.NEXT_PUBLIC_API_URL}/stories/user-stories`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -62,11 +79,23 @@ export const getUserStories = async () => {
 
 
 export const updateStory = async (payload: StoryProps) => {
-  const { _id, name, description, files, categoryId, sellerId, status } =
+  const { _id, name, price, description, files, categoryId, sellerId, status } =
     payload;
-  const cleanData = { name, description, files, categoryId, sellerId, status };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const cleanFiles = files.map(({ _id, ...rest }) => rest);
+
+  const cleanData = {
+    name,
+    price,
+    description,
+    files: cleanFiles,
+    categoryId,
+    sellerId,
+    status,
+  };
   const response = await fetchWithAuth(
-    `${process.env.NEXT_PUBLIC_API_URL}/categories/${_id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/stories/${_id}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -85,7 +114,7 @@ export const updateStory = async (payload: StoryProps) => {
 
 export const deleteStory = async (storyId: string) => {
   const response = await fetchWithAuth(
-    `${process.env.NEXT_PUBLIC_API_URL}/categories/${storyId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/stories/${storyId}`,
     {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },

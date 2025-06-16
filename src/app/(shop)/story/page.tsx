@@ -1,10 +1,10 @@
 import React from "react";
-import Products from "../../../components/ui/Products";
+import StoryPage from "../../../components/ui/StoryPage";
 
 const page = () => {
   return (
     <div>
-      <Products />
+      <StoryPage />
     </div>
   );
 };

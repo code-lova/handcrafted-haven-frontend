@@ -46,7 +46,6 @@ const Seller = () => {
     setOpenStoryDrawer(true);
   };
 
-
   const handleDeleteClick = (categoryId: string) => {
     const userConfirmed = window.confirm(
       "Are you sure you want to delete this story?"
@@ -66,7 +65,6 @@ const Seller = () => {
           <Clickbutton
             text="Add new story"
             type="button"
-            color="olive"
             onClick={() => setOpenStoryDrawer(true)}
           />
         </div>
@@ -95,18 +93,18 @@ const Seller = () => {
                 className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
               >
                 <Image
-                  className="rounded-t-lg h-[220px] w-full"
-                  src={story.files[0]}
+                  className="rounded-t-lg h-[270px] w-full"
+                  src={story.files[0].secure_url}
                   alt={story.name}
                   width={300}
                   height={300}
                 />
                 <div className="p-5">
                   <div className="flex justify-between items-center">
-                    <h5 className="mb-1 text-2xl font-bold tracking-tight text-white">
+                    <h5 className="mb-1 text-lg font-bold tracking-tight text-white">
                       {story.name}
                     </h5>
-                    <h5 className="mb-1 text-2xl font-bold tracking-tight text-white">
+                    <h5 className="mb-1 text-lg font-bold tracking-tight text-white">
                       ${story.price}
                     </h5>
                   </div>
@@ -123,7 +121,6 @@ const Seller = () => {
                   <div className="flex items-center justify-between mt-4">
                     <Clickbutton
                       type="button"
-                      color="from-purple-600 to-blue-500"
                       text="View/Edit"
                       onClick={() => editStory(story)}
                     />
@@ -141,11 +138,15 @@ const Seller = () => {
           </div>
         )}
       </div>
-        <StoryModal
-          isOpen={openStoryDrawer}
-          onClose={handleEditStoryDrawer}
-          story={selectedStory}
-        />
+      {openStoryDrawer && (
+        <div className="fixed inset-0 z-40 mt-14 bg-black/30 backdrop-blur-sm flex items-center justify-center">
+          <StoryModal
+            isOpen={openStoryDrawer}
+            onClose={handleEditStoryDrawer}
+            story={selectedStory}
+          />
+        </div>
+      )}
     </div>
   );
 };

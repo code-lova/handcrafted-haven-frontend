@@ -5,7 +5,6 @@ export const createStorySchema = yup.object().shape({
   files_upload: yup
     .array()
     .of(yup.mixed())
-    .min(1, "At least one image is required")
     .max(3, "You can upload up to 3 images"),
   description: yup
     .string()

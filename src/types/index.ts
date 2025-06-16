@@ -3,6 +3,8 @@
 //     buyer: string,
 // }
 
+import { StoryProps } from "@/service/request/story/type";
+
 export type UserRole = "seller" | "buyer";
 
 export interface RegisterData {
@@ -36,8 +38,14 @@ export interface DateFormatterProps {
 }
 
 export interface ClickButtonProps {
-    text: string;
-    type?: "button";
-    color: string;
-    onClick?: () => void;
+  text: string;
+  type?: "button" | "submit" | "reset";
+  className?: string;
+  disabled?: boolean;
+  onClick?: () => void;
 }
+
+export type CartItem = {
+  product: StoryProps;
+  quantity: number;
+};

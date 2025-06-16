@@ -4,9 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import useSignOut from "@/utils/logoutHandler";
+import { useSession } from "next-auth/react";
+import { useCart } from "@/context/CartContext";
 
 const SellerNavbar = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const { cart } = useCart();
 
   const toggleDrawer = () => setIsOpen(!isOpen);
 
@@ -20,21 +25,49 @@ const SellerNavbar = () => {
           Seller Dashboard
         </Link>
         <nav className="hidden md:flex space-x-6 font-medium">
-          <Link href="/seller" className="hover:text-gold">
-            Dashboard
-          </Link>
-          <Link href="/seller/story" className="hover:text-gold">
-            Stories
-          </Link>
-          <Link href="/seller/category" className="hover:text-gold">
-            Category
-          </Link>
-          <Link href="/seller/orders" className="hover:text-gold">
-            Orders
-          </Link>
-          <Link href="/dashboard/profile" className="hover:text-gold">
-            My Profile
-          </Link>
+          {status === "authenticated" && session?.user?.role === "buyer" ? (
+            <>
+              <Link href="/buyer" className="hover:text-gold">
+                Dashboard
+              </Link>
+              <Link href="/story" className="hover:text-gold">
+                Shop
+              </Link>
+              <Link href="/buyer/orders" className="hover:text-gold">
+                Orders
+              </Link>
+              <Link href="/buyer/profile" className="hover:text-gold">
+                My Profile
+              </Link>
+              <Link href="/cart" className="relative hover:text-gold">
+                🛒Cart
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-3 text-xs bg-gold text-white px-1.5 py-0.2 rounded-full">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/seller" className="hover:text-gold">
+                Dashboard
+              </Link>
+              <Link href="/seller/story" className="hover:text-gold">
+                Stories
+              </Link>
+              <Link href="/seller/category" className="hover:text-gold">
+                Category
+              </Link>
+              <Link href="/seller/orders" className="hover:text-gold">
+                Orders
+              </Link>
+              <Link href="/seller/profile" className="hover:text-gold">
+                My Profile
+              </Link>
+            </>
+          )}
+
           <button
             className="hover:text-gold cursor-pointer"
             onClick={handleSignOut}
@@ -61,24 +94,52 @@ const SellerNavbar = () => {
           </button>
         </div>
         <nav className="flex flex-col space-y-4 px-6 font-medium">
-          <Link href="/seller" onClick={toggleDrawer}>
-            Dashboard
-          </Link>
-          <Link href="/seller/story" onClick={toggleDrawer}>
-            Stories
-          </Link>
-          <Link href="/seller/category" onClick={toggleDrawer}>
-            Category
-          </Link>
-          <Link href="/seller/orders" onClick={toggleDrawer}>
-            Orders
-          </Link>
-          <Link href="/seller/profile" onClick={toggleDrawer}>
-            My Profile
-          </Link>
-          <Link href="/seller/orders" onClick={toggleDrawer}>
-            Orders
-          </Link>
+          {status === "authenticated" && session?.user?.role === "buyer" ? (
+            <>
+              <Link href="/buyer" onClick={toggleDrawer}>
+                Dashboard
+              </Link>
+              <Link href="/story" onClick={toggleDrawer}>
+                Shop
+              </Link>
+              <Link href="/buyer/orders" onClick={toggleDrawer}>
+                Orders
+              </Link>
+              <Link href="/buyer/profile" onClick={toggleDrawer}>
+                My Profile
+              </Link>
+              <Link href="/cart" onClick={toggleDrawer}>
+                🛒Cart
+                {cart.length > 0 && (
+                  <span className="absolute -top-2 -right-2 text-xs bg-gold text-white px-1.5 py-0.5 rounded-full">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/seller" onClick={toggleDrawer}>
+                Dashboard
+              </Link>
+              <Link href="/seller/story" onClick={toggleDrawer}>
+                Stories
+              </Link>
+              <Link href="/seller/category" onClick={toggleDrawer}>
+                Category
+              </Link>
+              <Link href="/seller/orders" onClick={toggleDrawer}>
+                Orders
+              </Link>
+              <Link href="/seller/profile" onClick={toggleDrawer}>
+                My Profile
+              </Link>
+              <Link href="/seller/orders" onClick={toggleDrawer}>
+                Orders
+              </Link>
+            </>
+          )}
+
           <p onClick={handleSignOut}>Logout</p>
         </nav>
       </div>

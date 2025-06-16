@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const ProductSidebar = () => {
+const StorySidebar = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState("");
 
@@ -41,4 +41,4 @@ const ProductSidebar = () => {
   );
 };
 
-export default ProductSidebar;
+export default StorySidebar;

@@ -5,7 +5,7 @@ export type Story = yup.InferType<typeof createStorySchema>;
 
 export interface createStroyProps {
   name: string;
-  files: string[];
+  files: { secure_url: string; public_id: string }[];
   description: string;
   price: number;
   status: string;
@@ -15,16 +15,16 @@ export interface createStroyProps {
 
 export interface StoryProps {
   _id: string;
-  uuid: string;
+  uuid?: string;
   name: string;
   price: number;
   description: string;
-  files: string[];
+  files: { secure_url: string; public_id: string; _id?: string }[];
   status: string;
   categoryId: string | { _id: string; name: string };
   sellerId: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface StoryFormValues {
@@ -33,8 +33,9 @@ export interface StoryFormValues {
   price: number;
   status: string;
   categoryId: string;
-  sellerId: string | undefined;
-  files: string[];
-  previews: string[];
-  files_upload: File[];
+  sellerId?: string;
+  files: { secure_url: string; public_id: string }[];           // Cloudinary URLs
+  previews: string[];        // preview URLs or base64 strings
+  files_upload: File[];      // selected File objects before upload
+  filesToDelete: string[];
 }

@@ -15,7 +15,7 @@ const UnauthorizedPage = () => {
           setDashboardPath("/seller");
           break;
         case "buyer":
-          setDashboardPath("/buyer");
+          setDashboardPath("/");
           break;
         default:
           setDashboardPath("/");
