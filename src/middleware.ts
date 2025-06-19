@@ -12,6 +12,10 @@ export default withAuth(
     // Role-based access
     const path = req.nextUrl.pathname;
 
+    // Debug: Useful for logging in dev
+    console.log("MIDDLEWARE PATH:", path);
+    console.log("MIDDLEWARE TOKEN:", token);
+
     // Block access to /login and /signup for authenticated users
     if (token && (path === "/login" || path === "/signup")) {
       // Redirect based on role
