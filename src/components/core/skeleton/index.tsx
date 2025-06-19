@@ -38,3 +38,55 @@ export const StoryDetailSkeleton = () => {
     </div>
   );
 };
+
+export const TableSkeleton = ({ rows = 5, cols = 5 }) => {
+  return (
+    <div className="overflow-x-auto border rounded-lg shadow max-h-[400px] overflow-y-auto">
+      <table className="min-w-full divide-y divide-gray-200 animate-pulse">
+        <thead className="bg-gray-50 sticky top-0 z-10">
+          <tr>
+            {Array.from({ length: cols }).map((_, i) => (
+              <th key={i} className="px-6 py-3">
+                <div className="h-3 w-3/4 bg-gray-200 rounded" />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {Array.from({ length: rows }).map((_, i) => (
+            <tr key={i}>
+              {Array.from({ length: cols }).map((_, j) => (
+                <td key={j} className="px-6 py-4">
+                  <div className="h-4 w-full bg-gray-100 rounded" />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export const CommentSkeleton = () => {
+  return (
+    <div className="space-y-4">
+      {[...Array(2)].map((_, i) => (
+        <div
+          key={i}
+          className="flex items-start gap-4 bg-white border rounded-xl p-4 shadow-sm animate-pulse"
+        >
+          <div className="w-10 h-10 bg-gray-300 rounded-full" />
+          <div className="flex-1 space-y-2">
+            <div className="flex justify-between items-center">
+              <div className="h-4 w-1/3 bg-gray-300 rounded" />
+              <div className="h-3 w-1/4 bg-gray-200 rounded" />
+            </div>
+            <div className="h-3 w-full bg-gray-200 rounded" />
+            <div className="h-3 w-5/6 bg-gray-200 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};

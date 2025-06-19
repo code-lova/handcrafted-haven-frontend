@@ -12,6 +12,9 @@ import { StoryDetailSkeleton } from "../core/skeleton";
 import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
 import Clickbutton from "../core/button/ClickButton";
+import dynamic from "next/dynamic";
+const CommentSection = dynamic(() => import("./CommentSection"), { ssr: false });
+
 
 const StoryDetail = () => {
   const { addToCart, cart } = useCart();
@@ -106,6 +109,12 @@ const StoryDetail = () => {
               <p className="text-olive text-xl font-semibold mb-2">
                 ${story?.price?.toFixed(2)}
               </p>
+              <p className="text-olive text-xl font-semibold mb-2">
+                Creator:{" "}
+                {typeof story?.sellerId === "string"
+                  ? "Unknown"
+                  : story?.sellerId?.name}
+              </p>
 
               <p className="text-gray-700 mb-6">{story?.description}</p>
              
@@ -121,29 +130,7 @@ const StoryDetail = () => {
         )}
 
         {/* Reviews */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-playfair font-semibold mb-6">
-            Leave a Review
-          </h2>
-          <form className="grid gap-4 max-w-xl">
-            <input
-              type="text"
-              placeholder="Your Name"
-              className="border rounded-lg px-4 py-2"
-            />
-            <textarea
-              rows={4}
-              placeholder="Your Review"
-              className="border rounded-lg px-4 py-2"
-            ></textarea>
-            <button
-              type="submit"
-              className="bg-olive text-white px-6 py-2 rounded-lg hover:bg-gold transition"
-            >
-              Submit Review
-            </button>
-          </form>
-        </div>
+       { story?._id && <CommentSection storyId={story?._id}/>}
       </div>
       <Footer />
     </>

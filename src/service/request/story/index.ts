@@ -129,3 +129,26 @@ export const deleteStory = async (storyId: string) => {
   const data = await response.json();
   return data;
 };
+
+//Filter by price and category
+export const filterStory = async (filters: {
+  category?: string;
+  price?: string;
+}): Promise<StoryProps[]> => {
+  const queryParams = new URLSearchParams();
+
+  if (filters.category) queryParams.append("category", filters.category);
+  if (filters.price) queryParams.append("price", filters.price);
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/stories/filter?${queryParams.toString()}`
+  );
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Failed to fetch filtered stories");
+  }
+
+  const result = await res.json();
+  return result.data;
+};

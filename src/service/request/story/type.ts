@@ -22,7 +22,7 @@ export interface StoryProps {
   files: { secure_url: string; public_id: string; _id?: string }[];
   status: string;
   categoryId: string | { _id: string; name: string };
-  sellerId: string;
+  sellerId: string | { _id: string; name: string };
   createdAt?: string;
   updatedAt?: string;
 }

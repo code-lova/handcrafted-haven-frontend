@@ -1,4 +1,6 @@
 import categgory from "./categgory.jpg";
+import success from "./success.png";
+
 
 
 
@@ -6,6 +8,7 @@ import categgory from "./categgory.jpg";
 
 const images = {
     categgory,
+    success,
 }
 
 

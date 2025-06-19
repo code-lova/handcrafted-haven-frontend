@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useCart } from "@/context/CartContext";
 import Navbar from "../Navbar";
@@ -8,12 +8,19 @@ import { createOrderSchema } from "@/schema/order";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "../core/spinner/LoadingSpinner";
+import { useUserContext } from "@/context/userContext";
+//import { useMutation } from "@tanstack/react-query";
+import { createStripeSession } from "@/service/request/order";
+import toast from "react-hot-toast";
+import LoaderButtons from "../core/loaders/LoaderButtons";
 
 const Checkout = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session, status } = useSession();
+  const { user } = useUserContext();
   const router = useRouter();
   const { cart, getSubtotal } = useCart();
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Redirect to /login if user is not authenticated
   useEffect(() => {
@@ -22,28 +29,45 @@ const Checkout = () => {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    if (cart.length === 0) {
+      router.replace("/cart");
+      toast.error("Your cart is empty. Add some items first.");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
-
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      buyerId: "", // this will be the authenticated user id coming from next auth session
-      sellerId: "",
-      storyId: "", //Id of the cart in local storage
-      categoryId: "",
-      amount: "",
-      quantity: "",
-      totalAmount: "",
-      phone: "",
-      address: "",
+      phone: user?.phone || "",
+      address: user?.address || "",
     },
-    validationSchema: createOrderSchema,
-    onSubmit: (values) => {
-      console.log("Billing Info:", values);
-      // NEXT: Trigger payment (Stripe/Paystack)
+    validationSchema: createOrderSchema.pick(["phone", "address"]),
+    onSubmit: async () => {
+      setLoading(true);
+      const orderItems = cart.map((item) => ({
+        storyId: item.product._id,
+        quantity: item.quantity,
+      }));
+
+      try {
+        console.log("order items", orderItems);
+        const url = await createStripeSession(orderItems);
+        router.push(url); // ⏩ redirect to Stripe
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toast.error(err.message || "Payment failed");
+        } else {
+          toast.error("Payment failed");
+        }
+      }finally{
+        setLoading(false);
+      }
     },
   });
 
-  if (status === "loading" || status === "unauthenticated") {
+   if (status === "loading" || !user || cart.length === 0) {
     return <LoadingSpinner />;
   }
 
@@ -65,33 +89,20 @@ const Checkout = () => {
                 Full Name
               </label>
               <input
-                type="text"
-                name="fullName"
-                onChange={formik.handleChange}
-                value={formik.values.fullName}
+                readOnly
+                value={user?.name}
                 className="w-full border px-4 py-2 rounded-md"
               />
-              {formik.touched.fullName && formik.errors.fullName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {formik.errors.fullName}
-                </p>
-              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-1">Email</label>
               <input
                 type="email"
-                name="email"
-                onChange={formik.handleChange}
-                value={formik.values.email}
+                value={user?.email}
+                readOnly
                 className="w-full border px-4 py-2 rounded-md"
               />
-              {formik.touched.email && formik.errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {formik.errors.email}
-                </p>
-              )}
             </div>
 
             <div className="md:col-span-2">
@@ -99,8 +110,8 @@ const Checkout = () => {
               <input
                 type="text"
                 name="address"
-                onChange={formik.handleChange}
-                value={formik.values.address}
+                readOnly
+                value={user?.address}
                 className="w-full border px-4 py-2 rounded-md"
               />
               {formik.touched.address && formik.errors.address && (
@@ -115,8 +126,8 @@ const Checkout = () => {
               <input
                 type="tel"
                 name="phone"
-                onChange={formik.handleChange}
-                value={formik.values.phone}
+                readOnly
+                value={user?.phone}
                 className="w-full border px-4 py-2 rounded-md"
               />
               {formik.touched.phone && formik.errors.phone && (
@@ -150,12 +161,12 @@ const Checkout = () => {
             </div>
 
             <div className="md:col-span-2">
-              <button
+              <LoaderButtons
                 type="submit"
-                className="w-full bg-olive text-white py-3 rounded-lg hover:bg-gold transition"
-              >
-                Pay Now
-              </button>
+                text="Pay Now"
+                loading={loading}
+                loadingText="Processing..."
+              />
             </div>
           </form>
         </div>

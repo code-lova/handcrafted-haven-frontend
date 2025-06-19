@@ -19,13 +19,16 @@ export interface User {
   name: string;
   email: string;
   role: string;
+  phone?: string;
+  address?: string;
 }
 
 export type LoaderButtonProps = {
-  loading: boolean;
-  text: string;
+  loading?: boolean;
+  text?: string;
   type?: "button" | "submit" | "reset";
   loadingText?: string;
+  disabled?: boolean;
 };
 
 export type loginProps = {

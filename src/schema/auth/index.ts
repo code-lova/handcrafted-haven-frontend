@@ -39,6 +39,11 @@ export const userSchema = yup.object().shape({
     .string()
     .email("Invalid email format")
     .required("Email is required"),
+  phone: yup
+    .string()
+    .optional()
+    .matches(/^\+\d+$/, "Phone number must start with '+' followed by digits"),
+  address: yup.string().max(1000, "Address is too long").optional(),
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")

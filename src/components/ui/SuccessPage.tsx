@@ -1,14 +1,28 @@
+"use client";
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
+import images from "../../../public/images";
+import { useRouter, useSearchParams } from "next/navigation";
+import LoadingSpinner from "../core/spinner/LoadingSpinner";
+import { useFinalizeOrder } from "@/hooks/useFinalizeOrder";
+import Clickbutton from "../core/button/ClickButton";
 
 const SuccessPage = () => {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  const { loading, success } = useFinalizeOrder(sessionId);
+  const router = useRouter();
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center px-4 py-16">
       <div className="bg-white shadow-lg rounded-2xl p-10 max-w-md w-full text-center">
         <div className="mb-6">
           <Image
-            src="/success.png"
+            src={images.success}
             alt="Success"
             width={96}
             height={96}
@@ -23,11 +37,14 @@ const SuccessPage = () => {
           it’s on the way.
         </p>
 
-        <Link href="/" className="inline-block">
-          <button className="bg-olive text-white px-6 py-3 rounded-xl hover:bg-gold transition font-medium">
-            Back to Home
-          </button>
-        </Link>
+        {success && (
+          <Clickbutton
+            type="button"
+            onClick={() => router.replace("/buyer/orders")}
+            text="View your orders"
+            className="bg-olive cursor-pointer text-white px-6 py-3 rounded-xl hover:bg-gold transition font-medium"
+          />
+        )}
       </div>
     </div>
   );

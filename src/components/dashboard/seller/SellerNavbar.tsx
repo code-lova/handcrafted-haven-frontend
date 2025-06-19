@@ -42,7 +42,7 @@ const SellerNavbar = () => {
               <Link href="/cart" className="relative hover:text-gold">
                 🛒Cart
                 {cart.length > 0 && (
-                  <span className="absolute -top-1 -right-3 text-xs bg-gold text-white px-1.5 py-0.2 rounded-full">
+                  <span className="absolute -top-1 -right-4 text-xs bg-gold text-white px-1.5 py-0.2 rounded-full">
                     {cart.length}
                   </span>
                 )}
@@ -111,7 +111,7 @@ const SellerNavbar = () => {
               <Link href="/cart" onClick={toggleDrawer}>
                 🛒Cart
                 {cart.length > 0 && (
-                  <span className="absolute -top-2 -right-2 text-xs bg-gold text-white px-1.5 py-0.5 rounded-full">
+                  <span className="ml-1 text-xs bg-gold text-white px-1.5 py-0.5 rounded-full">
                     {cart.length}
                   </span>
                 )}

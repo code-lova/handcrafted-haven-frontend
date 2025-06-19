@@ -1,14 +1,31 @@
-import { createOrderSchema } from "@/schema/order";
 import * as Yup from "yup";
+import { createOrderSchema } from "@/schema/order";
 
 export type Order = Yup.InferType<typeof createOrderSchema>;
 
-export interface orderProps {
-  buyerId: string;
-  sellerId: string;
+export type orderProps = {
   storyId: string;
-  categoryId: string;
-  amount: number;
   quantity: number;
+};
+
+export type OrderItem = {
+  storyId: {
+    name: string;
+    sellerId: {
+      name: string;
+    };
+  };
+  name: string;
+  price: number;
+  quantity: number;
+  _id: string;
+};
+
+export type Orders = {
+  _id: string;
+  items: OrderItem[];
   totalAmount: number;
-}
+  address: string;
+  status: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
+  createdAt: string;
+};

@@ -6,11 +6,17 @@ const LoaderButtons: React.FC<LoaderButtonProps> = ({
   text,
   type,
   loadingText,
+  disabled = false,
 }) => {
+  const isDisabled = disabled || loading;
   return (
     <button
-      className="flex items-center justify-center cursor-pointer w-full bg-ctaBtn hover:bg-ctaBtnHover text-white py-3 rounded-md font-medium"
-      disabled={loading}
+      className={`flex items-center justify-center cursor-pointer w-full py-3 rounded-md font-medium transition duration-300 ${
+        isDisabled
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-ctaBtn hover:bg-ctaBtnHover text-white"
+      }`}
+      disabled={isDisabled}
       type={type}
     >
       {loading ? (

@@ -22,7 +22,7 @@ export const createCategory = async (payload: createCategoryProps) => {
 
 //Get all categories
 export const getAllCategories = async () => {
-  const response = await fetchWithAuth(
+  const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/categories`,
     {
       method: "GET",
@@ -36,6 +36,7 @@ export const getAllCategories = async () => {
   }
 
   const data = await response.json();
+  console.log("Fetched categories:", data);
   return data;
 };
 

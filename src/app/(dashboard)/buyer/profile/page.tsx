@@ -1,12 +1,12 @@
 import React from "react";
-import Orderspage from "@/components/dashboard/buyer/Orderspage";
+import ProfilePage from "@/components/dashboard/buyer/ProfilePage";
 import SellerNavbar from "@/components/dashboard/seller/SellerNavbar";
 
 const page = () => {
   return (
     <div>
       <SellerNavbar />
-      <Orderspage />
+      <ProfilePage />
     </div>
   );
 };
