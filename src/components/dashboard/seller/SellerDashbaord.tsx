@@ -8,6 +8,7 @@ const SellerDashbaord = () => {
   const { user, isLoading } = useUserContext();
   //const USER_ROLE: UserRole = "seller";
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [analytics, setAnalytics] = useState({
     categoriesCount: 0,
     storiesCount: 0,
