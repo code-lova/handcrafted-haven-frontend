@@ -1,8 +1,6 @@
 import { fetchWithAuth } from "@/utils/fetchWithAuth";
 import { orderProps } from "./type";
 
-
-
 //Stripe payment logic
 export const createStripeSession = async (items: orderProps[]) => {
   const response = await fetchWithAuth(
@@ -42,7 +40,6 @@ export const finalizeStripeOrder = async (sessionId: string) => {
   return data; // Contains message and order
 };
 
-
 export const getUserOrders = async () => {
   const response = await fetchWithAuth(
     `${process.env.NEXT_PUBLIC_API_URL}/orders/user-orders`,
@@ -51,6 +48,11 @@ export const getUserOrders = async () => {
       headers: { "Content-Type": "application/json" },
     }
   );
+
+  // ✅ Handle 404 gracefully
+  if (response.status === 404) {
+    return [];
+  }
 
   if (!response.ok) {
     const errorData = await response.json();
