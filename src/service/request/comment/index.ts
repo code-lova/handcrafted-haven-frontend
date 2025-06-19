@@ -2,7 +2,6 @@ import { fetchWithAuth } from "@/utils/fetchWithAuth";
 import { newCommentProps } from "./type";
 
 export const createComment = async (payload: newCommentProps) => {
-  console.log("Sending payload to API:", payload);
   const response = await fetchWithAuth(
     `${process.env.NEXT_PUBLIC_API_URL}/comments`,
     {

@@ -21,7 +21,6 @@ const StorySidebar = ({ onFilter }: Props) => {
     queryFn: getAllCategories,
   });
 
-  console.log("cat", categories);
 
   const mutation = useMutation({
     mutationFn: filterStory,

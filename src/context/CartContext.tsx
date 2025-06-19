@@ -97,6 +97,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       clearCart,
       getSubtotal,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [cart]
   );
 

@@ -52,7 +52,6 @@ const Checkout = () => {
       }));
 
       try {
-        console.log("order items", orderItems);
         const url = await createStripeSession(orderItems);
         router.push(url); // ⏩ redirect to Stripe
       } catch (err: unknown) {

@@ -114,6 +114,7 @@ const OrdersPage = () => {
     table.setColumnFilters(
       statusFilter ? [{ id: "status", value: statusFilter }] : []
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter]);
 
   if (isLoading) {

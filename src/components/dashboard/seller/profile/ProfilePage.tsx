@@ -35,7 +35,6 @@ const ProfilePage = () => {
   });
 
   const handleSubmit = (values: UserType) => {
-    console.log("values submitting", values);
     mutate(values);
   };
 

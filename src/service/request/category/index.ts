@@ -36,7 +36,6 @@ export const getAllCategories = async () => {
   }
 
   const data = await response.json();
-  console.log("Fetched categories:", data);
   return data;
 };
 
