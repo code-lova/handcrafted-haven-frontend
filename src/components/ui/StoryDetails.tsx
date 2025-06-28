@@ -13,11 +13,17 @@ import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
 import Clickbutton from "../core/button/ClickButton";
 import dynamic from "next/dynamic";
-const CommentSection = dynamic(() => import("./CommentSection"), { ssr: false });
+import { useSession } from "next-auth/react";
 
+const CommentSection = dynamic(() => import("./CommentSection"), {
+  ssr: false,
+});
 
 const StoryDetail = () => {
   const { addToCart, cart } = useCart();
+  const { data: session } = useSession();
+  const buyerId = session?.user?.id;
+
   const params = useParams();
   const storyId = params?.id as string;
 
@@ -34,6 +40,10 @@ const StoryDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
 
   const handleAddToCart = () => {
+    if (!buyerId) {
+      toast.error("Please login to add items to your cart.");
+      return;
+    }
     if (story) {
       addToCart(story);
       toast.success(`${story.name} added to cart`);
@@ -117,7 +127,7 @@ const StoryDetail = () => {
               </p>
 
               <p className="text-gray-700 mb-6">{story?.description}</p>
-             
+
               <Clickbutton
                 onClick={handleAddToCart}
                 type="button"
@@ -130,7 +140,7 @@ const StoryDetail = () => {
         )}
 
         {/* Reviews */}
-       { story?._id && <CommentSection storyId={story?._id}/>}
+        {story?._id && <CommentSection storyId={story?._id} />}
       </div>
       <Footer />
     </>

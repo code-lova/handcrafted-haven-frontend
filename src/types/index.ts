@@ -1,8 +1,3 @@
-// export interface userType {
-//     seller: string,
-//     buyer: string,
-// }
-
 import { StoryProps } from "@/service/request/story/type";
 
 export type UserRole = "seller" | "buyer";
@@ -51,4 +46,5 @@ export interface ClickButtonProps {
 export type CartItem = {
   product: StoryProps;
   quantity: number;
+  buyerId: string;
 };

@@ -10,6 +10,7 @@ import { StoryProps } from "@/service/request/story/type";
 import { getCartFromStorage, saveCartToStorage } from "@/utils/CartStorage";
 import { CartItem } from "@/types";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type CartContextType = {
   cart: CartItem[];
@@ -23,25 +24,32 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+  const { data: session } = useSession();
+  const buyerId = session?.user?.id;
   const [cart, setCart] = useState<CartItem[]>([]);
   const MAX_QUANTITY = 10;
 
   // Load from localStorage once
   useEffect(() => {
-    const savedCart = getCartFromStorage();
-    setCart(savedCart);
-  }, []);
+    if (buyerId) {
+      const savedCart = getCartFromStorage(buyerId);
+      setCart(savedCart);
+    }else {
+      setCart([]); // no buyer, clear cart
+    }
+  }, [buyerId]);
 
   // Sync to localStorage on change
   useEffect(() => {
-    saveCartToStorage(cart);
-  }, [cart]);
+    if (buyerId) {
+      saveCartToStorage(buyerId, cart);
+    }
+  }, [cart, buyerId]);
 
   const addToCart = (product: StoryProps, quantity: number = 1) => {
+    if (!buyerId) return toast.error("You must be logged in to add items.");
     setCart((prev) => {
-      const existingItem = prev.find(
-        (item) => item.product._id === product._id
-      );
+      const existingItem = prev.find((item) => item.product._id === product._id);
       if (existingItem) {
         if (existingItem.quantity >= MAX_QUANTITY) {
           toast.error("You cannot add more than 10 of this item.");
@@ -57,7 +65,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             : item
         );
       }
-      return [...prev, { product, quantity: Math.min(quantity, MAX_QUANTITY) }];
+      return [...prev, { product, quantity: Math.min(quantity, MAX_QUANTITY), buyerId }];
     });
   };
 
