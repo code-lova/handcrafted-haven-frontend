@@ -8,7 +8,6 @@ import { useSession } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 
 const SellerNavbar = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const { cart } = useCart();
@@ -17,15 +16,17 @@ const SellerNavbar = () => {
 
   const { handleSignOut } = useSignOut();
 
+  const isBuyer = status === "authenticated" && session?.user?.role === "buyer";
+
   return (
     <header className="bg-olive text-white sticky top-0 z-50 shadow">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
         {/* Desktop Menu */}
-        <Link href="/seller" className="text-xl font-playfair font-bold">
-          Seller Dashboard
+        <Link href={isBuyer ? "/buyer" : "/seller"} className="text-xl font-playfair font-bold">
+          {isBuyer ? "Buyer Dashboard" : "Seller Dashboard"}
         </Link>
         <nav className="hidden md:flex space-x-6 font-medium">
-          {status === "authenticated" && session?.user?.role === "buyer" ? (
+          {isBuyer ? (
             <>
               <Link href="/buyer" className="hover:text-gold">
                 Dashboard
@@ -94,7 +95,7 @@ const SellerNavbar = () => {
           </button>
         </div>
         <nav className="flex flex-col space-y-4 px-6 font-medium">
-          {status === "authenticated" && session?.user?.role === "buyer" ? (
+          {isBuyer ? (
             <>
               <Link href="/buyer" onClick={toggleDrawer}>
                 Dashboard
@@ -133,9 +134,6 @@ const SellerNavbar = () => {
               </Link>
               <Link href="/seller/profile" onClick={toggleDrawer}>
                 My Profile
-              </Link>
-              <Link href="/seller/orders" onClick={toggleDrawer}>
-                Orders
               </Link>
             </>
           )}

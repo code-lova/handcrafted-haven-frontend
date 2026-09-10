@@ -48,3 +48,10 @@ export type CartItem = {
   quantity: number;
   buyerId: string;
 };
+
+export type ContactFormValues = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};

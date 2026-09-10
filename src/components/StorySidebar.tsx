@@ -2,6 +2,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { SlidersHorizontal } from "lucide-react";
 import { getAllCategories } from "@/service/request/category";
 import { CategoryProps } from "@/service/request/category/type";
 import { filterStory } from "@/service/request/story";
@@ -47,17 +48,30 @@ const StorySidebar = ({ onFilter }: Props) => {
     },
   });
 
+  const hasActiveFilters = formik.values.category || formik.values.price;
+
+  const handleClear = () => {
+    formik.resetForm();
+    onFilter(null, false, "");
+  };
+
   return (
-    <aside className="w-full md:w-64 p-4 bg-white rounded-lg">
-      <h3 className="font-semibold text-lg mb-4">Filter By</h3>
+    <aside className="w-full md:w-64 h-fit md:sticky md:top-24 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex items-center gap-2 mb-5">
+        <SlidersHorizontal size={18} className="text-terracotta" />
+        <h3 className="font-semibold text-rich-brown">Filter By</h3>
+      </div>
       <form onSubmit={formik.handleSubmit}>
-        <div className="mb-6">
-          <h4 className="font-medium mb-2">Category</h4>
+        <div className="mb-5">
+          <label htmlFor="category" className="block text-sm font-medium text-rich-brown mb-1.5">
+            Category
+          </label>
           <select
             name="category"
+            id="category"
             value={formik.values.category}
             onChange={formik.handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-olive focus:border-transparent bg-white"
           >
             <option value="">All</option>
             {categories?.map((category) => (
@@ -68,13 +82,16 @@ const StorySidebar = ({ onFilter }: Props) => {
           </select>
         </div>
 
-        <div>
-          <h4 className="font-medium mb-2">Price</h4>
+        <div className="mb-5">
+          <label htmlFor="price" className="block text-sm font-medium text-rich-brown mb-1.5">
+            Price
+          </label>
           <select
             name="price"
+            id="price"
             value={formik.values.price}
             onChange={formik.handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-olive focus:border-transparent bg-white"
           >
             <option value="">Any</option>
             <option value="0-100">$0 - $100</option>
@@ -83,12 +100,23 @@ const StorySidebar = ({ onFilter }: Props) => {
             <option value="500-5000">$500 - $5000</option>
           </select>
         </div>
+
         <button
           type="submit"
-          className="mt-4 px-4 py-2 bg-olive text-white rounded w-full"
+          className="px-4 py-2.5 bg-terracotta hover:bg-terracotta-dark text-white rounded-md w-full font-medium transition cursor-pointer"
         >
           Apply Filter
         </button>
+
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="mt-2 px-4 py-2.5 text-muted hover:text-rich-brown rounded-md w-full font-medium transition cursor-pointer text-sm"
+          >
+            Clear Filters
+          </button>
+        )}
       </form>
     </aside>
   );

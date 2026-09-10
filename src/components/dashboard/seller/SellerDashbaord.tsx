@@ -2,76 +2,181 @@
 import { useUserContext } from "@/context/userContext";
 import LoadingSpinner from "../../core/spinner/LoadingSpinner";
 import SellerNavbar from "./SellerNavbar";
-import { useState } from "react";
+import StatCard from "../StatCard";
+import QuickActionCard from "../QuickActionCard";
+import StorySkeletonCard from "@/components/core/skeleton/StorySkeletonCard";
+import { useQuery } from "@tanstack/react-query";
+import { getUserStories } from "@/service/request/story";
+import { getAllCategories } from "@/service/request/category";
+import { StoryProps } from "@/service/request/story/type";
+import { CategoryProps } from "@/service/request/category/type";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Package,
+  CheckCircle2,
+  FileEdit,
+  Tags,
+  PlusCircle,
+  ClipboardList,
+  UserCircle,
+} from "lucide-react";
 
 const SellerDashbaord = () => {
-  const { user, isLoading } = useUserContext();
-  //const USER_ROLE: UserRole = "seller";
+  const { user, isLoading: isUserLoading } = useUserContext();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [analytics, setAnalytics] = useState({
-    categoriesCount: 0,
-    storiesCount: 0,
-    ordersCount: 0,
-    buyersCount: 0,
+  const { data: stories, isLoading: isStoriesLoading } = useQuery<StoryProps[]>({
+    queryKey: ["story"],
+    queryFn: getUserStories,
+    refetchOnWindowFocus: false,
   });
 
-  if (isLoading) {
+  const { data: categories } = useQuery<CategoryProps[]>({
+    queryKey: ["categories"],
+    queryFn: getAllCategories,
+    refetchOnWindowFocus: false,
+  });
+
+  if (isUserLoading) {
     return <LoadingSpinner />;
   }
+
+  const totalStories = stories?.length ?? 0;
+  const activeStories = stories?.filter((s) => s.status === "active").length ?? 0;
+  const draftStories = totalStories - activeStories;
+  const categoriesAvailable = categories?.length ?? 0;
+
+  const recentStories = [...(stories ?? [])]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime()
+    )
+    .slice(0, 6);
 
   return (
     <>
       <SellerNavbar />
-      <div className="p-12">
-        <h1 className="text-3xl font-playfair mb-6">Welcome Seller! 🎉</h1>
-        {/* More seller dashboard content will come here */}
-        <div>
-          {user && (
-            <div className="mb-8 font-medium text-xl text-gray-700">
-              Hello, <span className="font-bold text-olive">{user.name}</span>{" "}
-              👋
-            </div>
-          )}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 rounded-2xl shadow-lg bg-gradient-to-r from-green-400 via-green-300 to-green-500 text-white transform hover:scale-105 transition duration-300 ease-in-out">
-            <h2 className="text-xl font-semibold mb-2">Categories Created</h2>
-            <p className="text-5xl font-bold">{analytics.categoriesCount}</p>
-          </div>
-
-          <div className="p-6 rounded-2xl shadow-lg bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 text-white transform hover:scale-105 transition duration-300 ease-in-out">
-            <h2 className="text-xl font-semibold mb-2">Stories Created</h2>
-            <p className="text-5xl font-bold">{analytics.storiesCount}</p>
-          </div>
-
-          <div className="p-6 rounded-2xl shadow-lg bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 text-white transform hover:scale-105 transition duration-300 ease-in-out">
-            <h2 className="text-xl font-semibold mb-2">Orders Placed</h2>
-            <p className="text-5xl font-bold">{analytics.ordersCount}</p>
-          </div>
-
-          <div className="p-6 rounded-2xl shadow-lg bg-gradient-to-r from-pink-400 via-pink-300 to-pink-500 text-white transform hover:scale-105 transition duration-300 ease-in-out">
-            <h2 className="text-xl font-semibold mb-2">Total Buyers</h2>
-            <p className="text-5xl font-bold">{analytics.buyersCount}</p>
-          </div>
-        </div>
-
-        <div className="text-center py-10">
-          <p className="text-olive font-semibold italic text-4xl">
-            Hope you have something new for us today..!!{" "}
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        <div className="mb-10">
+          <h1 className="text-3xl font-playfair font-semibold text-rich-brown">
+            Welcome back{user?.name ? `, ${user.name}` : ""} 👋
+          </h1>
+          <p className="text-muted mt-1">
+            Here&apos;s what&apos;s happening with your shop today.
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto mt-10">
-          <div className="bg-olive text-white p-8 rounded-2xl shadow-xl text-center transform hover:scale-105 transition duration-300 ease-in-out">
-            <h2 className="text-3xl font-playfair mb-4">Keep Growing 🚀</h2>
-            <p className="text-lg leading-relaxed font-light">
-              Every story you share, every product you create brings value to
-              the world.
-              <br />
-              Inspire. Create. Succeed. 🌟
-            </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+          <StatCard icon={Package} label="Total Listings" value={totalStories} accent="terracotta" />
+          <StatCard icon={CheckCircle2} label="Active Listings" value={activeStories} accent="olive" />
+          <StatCard icon={FileEdit} label="Drafts" value={draftStories} accent="gold" />
+          <StatCard icon={Tags} label="Categories Available" value={categoriesAvailable} accent="muted" />
+        </div>
+
+        <div className="mb-10">
+          <h2 className="text-xl font-playfair font-semibold text-rich-brown mb-4">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <QuickActionCard
+              icon={PlusCircle}
+              title="Add a Story"
+              description="List a new handmade item"
+              href="/seller/story"
+            />
+            <QuickActionCard
+              icon={Tags}
+              title="Manage Categories"
+              description="Organize how buyers browse"
+              href="/seller/category"
+            />
+            <QuickActionCard
+              icon={ClipboardList}
+              title="View Orders"
+              description="See what buyers have ordered"
+              href="/seller/orders"
+            />
+            <QuickActionCard
+              icon={UserCircle}
+              title="Edit Profile"
+              description="Update your seller details"
+              href="/seller/profile"
+            />
           </div>
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-playfair font-semibold text-rich-brown">
+              Recent Listings
+            </h2>
+            {totalStories > 0 && (
+              <Link
+                href="/seller/story"
+                className="text-terracotta font-medium hover:text-terracotta-dark text-sm"
+              >
+                View all &rarr;
+              </Link>
+            )}
+          </div>
+
+          {isStoriesLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              <StorySkeletonCard />
+              <StorySkeletonCard />
+              <StorySkeletonCard />
+            </div>
+          ) : totalStories === 0 ? (
+            <div className="text-center bg-olive/5 rounded-2xl py-16 px-6">
+              <p className="text-lg font-medium text-rich-brown mb-2">
+                You haven&apos;t listed anything yet
+              </p>
+              <p className="text-muted mb-6 max-w-sm mx-auto">
+                Add your first story to start showing up in the marketplace.
+              </p>
+              <Link
+                href="/seller/story"
+                className="inline-block px-6 py-3 rounded-md bg-terracotta hover:bg-terracotta-dark text-white font-medium transition"
+              >
+                Add Your First Story
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {recentStories.map((story) => (
+                <Link
+                  key={story._id}
+                  href="/seller/story"
+                  className="flex gap-4 bg-white border border-gray-100 rounded-xl p-3 hover:shadow-md transition"
+                >
+                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                    <Image
+                      src={story.files[0]?.secure_url || "/image1.jpeg"}
+                      alt={story.name}
+                      width={80}
+                      height={80}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-medium text-rich-brown truncate">{story.name}</h3>
+                    <p className="text-terracotta font-semibold text-sm mt-1">
+                      ${story.price}
+                    </p>
+                    <span
+                      className={`inline-block mt-2 text-xs px-2 py-0.5 rounded-full ${
+                        story.status === "active"
+                          ? "bg-olive/10 text-olive"
+                          : "bg-gray-100 text-muted"
+                      }`}
+                    >
+                      {story.status === "active" ? "Active" : "Draft"}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>

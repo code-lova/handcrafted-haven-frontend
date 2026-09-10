@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import images from "../../../public/images";
 import { useRouter, useSearchParams } from "next/navigation";
+import Navbar from "../Navbar";
 import LoadingSpinner from "../core/spinner/LoadingSpinner";
 import { useFinalizeOrder } from "@/hooks/useFinalizeOrder";
 import Clickbutton from "../core/button/ClickButton";
@@ -18,35 +20,56 @@ const SuccessPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center px-4 py-16">
-      <div className="bg-white shadow-lg rounded-2xl p-10 max-w-md w-full text-center">
-        <div className="mb-6">
-          <Image
-            src={images.success}
-            alt="Success"
-            width={96}
-            height={96}
-            className="mx-auto"
-          />
-        </div>
-        <h1 className="text-3xl font-playfair font-bold text-olive mb-4">
-          Thank You!
-        </h1>
-        <p className="text-gray-700 text-lg mb-6">
-          Your order has been successfully placed. You’ll receive an update once
-          it’s on the way.
-        </p>
+    <>
+      <Navbar />
+      <div className="min-h-[80vh] bg-olive/5 flex flex-col items-center justify-center px-4 py-16">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-10 max-w-md w-full text-center">
+          <div className="mb-6">
+            <Image
+              src={images.success}
+              alt="Success"
+              width={96}
+              height={96}
+              className="mx-auto"
+            />
+          </div>
 
-        {success && (
-          <Clickbutton
-            type="button"
-            onClick={() => router.replace("/buyer/orders")}
-            text="View your orders"
-            className="bg-olive cursor-pointer text-white px-6 py-3 rounded-xl hover:bg-gold transition font-medium"
-          />
-        )}
+          {success ? (
+            <>
+              <h1 className="text-3xl font-playfair font-bold text-rich-brown mb-4">
+                Thank You!
+              </h1>
+              <p className="text-muted text-lg mb-8">
+                Your order has been successfully placed. You&apos;ll receive an
+                update once it&apos;s on the way.
+              </p>
+              <Clickbutton
+                type="button"
+                onClick={() => router.replace("/buyer/orders")}
+                text="View Your Orders"
+              />
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl font-playfair font-bold text-rich-brown mb-4">
+                Confirming Your Order
+              </h1>
+              <p className="text-muted text-lg mb-8">
+                We couldn&apos;t confirm your payment just yet. If you were
+                charged, check your orders in a moment or reach out to us.
+              </p>
+            </>
+          )}
+
+          <Link
+            href="/story"
+            className="block mt-4 text-terracotta font-medium hover:text-terracotta-dark"
+          >
+            Continue Shopping
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

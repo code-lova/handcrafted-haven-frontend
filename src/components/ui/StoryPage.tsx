@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import StorySidebar from "../StorySidebar";
 import Navbar from "../Navbar";
 import Image from "next/image";
-import Hero from "../Hero";
+import PageHeader from "../core/PageHeader";
 import Footer from "../Footer";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
@@ -33,9 +33,13 @@ const StoryPage = () => {
   return (
     <>
       <Navbar />
-      <Hero />
+      <PageHeader
+        eyebrow="Marketplace"
+        title="Browse Handcrafted Goods"
+        description="Every piece here is made by hand, in small batches, by an independent artisan."
+      />
 
-      <div className="max-w-7xl mx-auto px-4 py-26 grid grid-cols-1 md:grid-cols-[250px_1fr] gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8">
         <StorySidebar
           onFilter={(data, loading, error) => {
             setFilteredStories(data);
@@ -45,9 +49,17 @@ const StoryPage = () => {
         />
 
         <section>
-          <h2 className="text-2xl font-playfair font-semibold mb-6">
-            All Stories
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-playfair font-semibold text-rich-brown">
+              All Stories
+            </h2>
+            {!isLoading && !isFiltering && !filterError && !isError && (
+              <p className="text-sm text-muted">
+                {storiesToDisplay?.length ?? 0} piece
+                {storiesToDisplay?.length === 1 ? "" : "s"}
+              </p>
+            )}
+          </div>
 
           {isLoading || isFiltering ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,9 +76,12 @@ const StoryPage = () => {
             </div>
           ) : Array.isArray(storiesToDisplay) &&
             storiesToDisplay.length === 0 ? (
-            <div className="flex justify-center items-center mt-20">
-              <p className="text-gray-600 text-center text-lg font-medium">
-                No stories found with the selected filters.
+            <div className="text-center bg-olive/5 rounded-2xl py-16 px-6">
+              <p className="text-lg font-medium text-rich-brown mb-2">
+                No stories found
+              </p>
+              <p className="text-muted">
+                Try adjusting or clearing your filters.
               </p>
             </div>
           ) : (
@@ -75,35 +90,31 @@ const StoryPage = () => {
                 <Link
                   key={story._id}
                   href={`/story/${story.uuid}`}
-                  className="cursor-pointer"
+                  className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition flex flex-col h-full overflow-hidden"
                 >
-                  <div className="bg-white rounded-xl shadow hover:shadow-lg transition flex flex-col h-full">
-                    <div className="h-80 w-full overflow-hidden rounded-t-xl flex items-center justify-center bg-gray-100">
-                      <Image
-                        src={story.files[0]?.secure_url || "/image1.jpeg"}
-                        alt={story.name}
-                        width={300}
-                        height={240}
-                        className="object-fit h-full w-full"
-                      />
+                  <div className="h-64 w-full overflow-hidden bg-gray-100">
+                    <Image
+                      src={story.files[0]?.secure_url || "/image1.jpeg"}
+                      alt={story.name}
+                      width={300}
+                      height={240}
+                      className="object-cover h-full w-full group-hover:scale-105 transition duration-300"
+                    />
+                  </div>
+                  <div className="flex justify-between items-start gap-2 p-4 flex-1">
+                    <div>
+                      <h3 className="font-playfair font-semibold text-rich-brown line-clamp-2">
+                        {story.name}
+                      </h3>
+                      <p className="text-muted text-sm mt-1">
+                        {typeof story?.categoryId === "string"
+                          ? "Unknown"
+                          : story?.categoryId.name}
+                      </p>
                     </div>
-                    <div className="flex justify-between flex-1 p-4">
-                      <div>
-                        <h3 className="text-lg font-playfair font-semibold line-clamp-2">
-                          #{story.name}
-                        </h3>
-                        <p className="text-gray-500 text-sm mb-1">
-                          {typeof story?.categoryId === "string"
-                            ? "Unknown"
-                            : story?.categoryId.name}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-olive font-semibold">
-                          ${story.price}
-                        </p>
-                      </div>
-                    </div>
+                    <p className="text-terracotta font-semibold whitespace-nowrap">
+                      ${story.price}
+                    </p>
                   </div>
                 </Link>
               ))}
